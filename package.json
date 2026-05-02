@@ -1,12 +1,12 @@
 {
-  "name": "firecrawl-credits",
-  "displayName": "Firecrawl Credits Monitor",
-  "description": "Real-time Firecrawl credit display in VSCode status bar",
+  "name": "fireworks-credits",
+  "displayName": "Fireworks Credits Monitor",
+  "description": "Real-time Fireworks AI credit display in VSCode status bar",
   "version": "0.0.1",
   "publisher": "sw1043",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sw1043/firecrawl-credits-indicator"
+    "url": "https://github.com/sw1043/fireworks-credits-indicator"
   },
   "engines": {
     "vscode": "^1.74.0"
@@ -15,7 +15,7 @@
     "Other"
   ],
   "keywords": [
-    "firecrawl",
+    "fireworks",
     "credits",
     "api",
     "statusbar"
@@ -27,15 +27,15 @@
   "contributes": {
     "commands": [
       {
-        "command": "firecrawlCredits.refresh",
-        "title": "Refresh Firecrawl Credits",
-        "category": "Firecrawl",
+        "command": "fireworksCredits.refresh",
+        "title": "Refresh Fireworks Credits",
+        "category": "Fireworks",
         "icon": "$(refresh)"
       },
       {
-        "command": "firecrawlCredits.signin",
-        "title": "Sign In to Firecrawl",
-        "category": "Firecrawl",
+        "command": "fireworksCredits.signin",
+        "title": "Sign In to Fireworks",
+        "category": "Fireworks",
         "icon": "$(account)"
       }
     ]

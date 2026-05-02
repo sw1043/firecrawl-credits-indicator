@@ -13,4 +13,4 @@ node_modules/**
 package-lock.json
 
 # Keep user-facing config
-!firecrawl.yml
+!fw-indicator.yml

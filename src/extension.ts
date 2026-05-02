@@ -25,7 +25,7 @@ const DEFAULT_CONFIG: Config = {
 };
 
 function loadConfig(context: vscode.ExtensionContext): Config {
-    const configPath = path.join(context.extensionPath, 'firecrawl.yml');
+    const configPath = path.join(context.extensionPath, 'fw-indicator.yml');
     try {
         if (fs.existsSync(configPath)) {
             const fileContents = fs.readFileSync(configPath, 'utf8');
@@ -37,9 +37,9 @@ function loadConfig(context: vscode.ExtensionContext): Config {
             };
         }
     } catch (e) {
-        console.error('[Firecrawl Credits] Failed to load firecrawl.yml:', e);
+        console.error('[Fireworks Credits] Failed to load fw-indicator.yml:', e);
         vscode.window.showWarningMessage(
-            'Failed to load firecrawl.yml. Using default settings.'
+            'Failed to load fw-indicator.yml. Using default settings.'
         );
     }
     return DEFAULT_CONFIG;
@@ -92,7 +92,7 @@ function fetchCredits(context: vscode.ExtensionContext): Promise<CreditsResult |
 
         proc.on('close', (code: number | null) => {
             if (code !== 0 || !stdout.trim()) {
-                console.error('[Firecrawl Credits] firectl error:', stderr || stdout);
+                console.error('[Fireworks Credits] firectl error:', stderr || stdout);
                 resolve(null);
                 return;
             }
@@ -100,7 +100,7 @@ function fetchCredits(context: vscode.ExtensionContext): Promise<CreditsResult |
                 const parsed: CreditsResult = JSON.parse(stdout.trim());
                 resolve(parsed);
             } catch (e) {
-                console.error('[Firecrawl Credits] JSON parse error:', e);
+                console.error('[Fireworks Credits] JSON parse error:', e);
                 resolve(null);
             }
         });
@@ -108,7 +108,7 @@ function fetchCredits(context: vscode.ExtensionContext): Promise<CreditsResult |
         setTimeout(() => {
             if (!proc.killed) {
                 proc.kill();
-                console.warn('[Firecrawl Credits] Timeout reached');
+                console.warn('[Fireworks Credits] Timeout reached');
                 resolve(null);
             }
         }, 15000);
@@ -119,27 +119,27 @@ async function updateStatusBar(context: vscode.ExtensionContext, config: Config)
     const data = await fetchCredits(context);
 
     if (!data) {
-        statusBarItem.text = '$(error) Firecrawl: Error';
+        statusBarItem.text = '$(error) Fireworks: Error';
         statusBarItem.tooltip = 'Failed to fetch credits. Check firectl installation or network.';
-        statusBarItem.command = 'firecrawlCredits.refresh';
+        statusBarItem.command = 'fireworksCredits.refresh';
         statusBarItem.color = '#FF6B6B';
         statusBarItem.show();
         return;
     }
 
     if (!data.auth) {
-        statusBarItem.text = '$(account) Firecrawl: Sign In';
+        statusBarItem.text = '$(account) Fireworks: Sign In';
         statusBarItem.tooltip = 'Not authenticated. Click to run firectl signin.';
-        statusBarItem.command = 'firecrawlCredits.signin';
+        statusBarItem.command = 'fireworksCredits.signin';
         statusBarItem.color = '#FFD93D';
         statusBarItem.show();
         return;
     }
 
     if (data.error) {
-        statusBarItem.text = '$(error) Firecrawl: Error';
+        statusBarItem.text = '$(error) Fireworks: Error';
         statusBarItem.tooltip = data.error;
-        statusBarItem.command = 'firecrawlCredits.refresh';
+        statusBarItem.command = 'fireworksCredits.refresh';
         statusBarItem.color = '#FF6B6B';
         statusBarItem.show();
         return;
@@ -156,9 +156,9 @@ async function updateStatusBar(context: vscode.ExtensionContext, config: Config)
         statusBarItem.color = undefined;
     }
 
-    statusBarItem.text = `$(flame) Firecrawl: $${credits.toFixed(2)}`;
+    statusBarItem.text = `$(flame) Fireworks: $${credits.toFixed(2)}`;
     statusBarItem.tooltip = 'Click to refresh credits now';
-    statusBarItem.command = 'firecrawlCredits.refresh';
+    statusBarItem.command = 'fireworksCredits.refresh';
     statusBarItem.show();
 }
 
@@ -172,15 +172,15 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(statusBarItem);
 
     const refreshCmd = vscode.commands.registerCommand(
-        'firecrawlCredits.refresh',
+        'fireworksCredits.refresh',
         () => updateStatusBar(context, config)
     );
     context.subscriptions.push(refreshCmd);
 
     const signinCmd = vscode.commands.registerCommand(
-        'firecrawlCredits.signin',
+        'fireworksCredits.signin',
         () => {
-            const terminal = vscode.window.createTerminal('Firecrawl Signin');
+            const terminal = vscode.window.createTerminal('Fireworks Signin');
             terminal.sendText('firectl signin');
             terminal.show();
         }
@@ -196,7 +196,7 @@ export function activate(context: vscode.ExtensionContext) {
             data.credits < config.low_credit_warning_threshold
         ) {
             vscode.window.showWarningMessage(
-                `Firecrawl credits are running low: $${data.credits.toFixed(2)}`,
+                `Fireworks credits are running low: $${data.credits.toFixed(2)}`,
                 'Refresh',
                 'Dismiss'
             ).then(selection => {

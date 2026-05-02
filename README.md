@@ -1,4 +1,4 @@
-# Firecrawl: Fireworks AI Credits Monitor for VSCode
+# Fireworks AI Credits Monitor for VSCode
 
 A VSCode extension that displays Fireworks AI credits in real-time on the Status Bar.
 
@@ -20,10 +20,10 @@ A VSCode extension that displays Fireworks AI credits in real-time on the Status
 
 ## Configuration
 
-Extension settings are managed via the `firecrawl.yml` file.
+Extension settings are managed via the `fw-indicator.yml` file.
 
 ```yaml
-# firecrawl.yml
+# fw-indicator.yml
 refresh_interval_seconds: 60        # Status Bar refresh interval (seconds)
 low_credit_warning_threshold: 5.0   # Threshold for popup warning (USD)
 low_credit_color_threshold: 20.0    # Threshold for warning color on Status Bar (USD)
