@@ -2,6 +2,8 @@
 
 A VSCode extension that displays Fireworks AI credits in real-time on the Status Bar.
 
+<img width="1600" alt="Image" src="https://github.com/user-attachments/assets/a8acba64-018f-441d-b60b-43200ce40a74" />
+
 ## Requirements
 
 - Python must be available (`python` on Windows, `python3` on macOS/Linux)
