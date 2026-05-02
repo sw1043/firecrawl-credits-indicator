@@ -4,6 +4,10 @@
   "description": "Real-time Firecrawl credit display in VSCode status bar",
   "version": "0.0.1",
   "publisher": "sw1043",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sw1043/firecrawl-credits-indicator"
+  },
   "engines": {
     "vscode": "^1.74.0"
   },
