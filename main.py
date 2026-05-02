@@ -1,4 +1,6 @@
 import subprocess
+import json
+import sys
 
 
 def execute(command) -> str:
@@ -11,10 +13,10 @@ def execute(command) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
+
 def parse(raw_output) -> dict:
     """
     Parse the raw output from the command execution and return a structured dictionary.
-    This is a placeholder function and should be implemented based on the expected output format.
     """
     parsed_data = {}
     lines = raw_output.splitlines()
@@ -24,22 +26,31 @@ def parse(raw_output) -> dict:
             parsed_data[key.strip()] = value.strip()
     return parsed_data
 
+
 def auth() -> bool:
     response = execute("firectl whoami")
     parsed_data = parse(response)
-    if 'Account ID' in parsed_data.keys():
-        return True
-    return False
+    return 'Account ID' in parsed_data
+
 
 def get_credits() -> float:
     response = execute("firectl account get")
     parsed_data = parse(response)
     return float(parsed_data.get('Balance', 'USD 0').replace('USD', '').strip())
 
+
 def main():
-    while not auth():
-        execute("firectl signin")
-    print(get_credits())  ## temporal implementation
+    if not auth():
+        print(json.dumps({"auth": False, "credits": None, "error": "Not authenticated"}))
+        sys.exit(1)
+
+    try:
+        credits = get_credits()
+        print(json.dumps({"auth": True, "credits": credits}))
+    except Exception as e:
+        print(json.dumps({"auth": True, "credits": None, "error": str(e)}))
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

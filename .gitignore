@@ -8,3 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+
+# VSCode Extension
+node_modules/
+out/
+*.vsix
+

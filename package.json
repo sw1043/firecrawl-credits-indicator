@@ -1,0 +1,54 @@
+{
+  "name": "firecrawl-credits",
+  "displayName": "Firecrawl Credits Monitor",
+  "description": "Real-time Firecrawl credit display in VSCode status bar",
+  "version": "0.0.1",
+  "publisher": "sw1043",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "firecrawl",
+    "credits",
+    "api",
+    "statusbar"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "firecrawlCredits.refresh",
+        "title": "Refresh Firecrawl Credits",
+        "category": "Firecrawl",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "firecrawlCredits.signin",
+        "title": "Sign In to Firecrawl",
+        "category": "Firecrawl",
+        "icon": "$(account)"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^18.x",
+    "@types/vscode": "^1.74.0",
+    "typescript": "^5.x"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.1"
+  }
+}
