@@ -52,7 +52,5 @@
     "@types/vscode": "^1.74.0",
     "typescript": "^5.x"
   },
-  "dependencies": {
-    "js-yaml": "^4.1.1"
-  }
+  "dependencies": {}
 }

@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as yaml from 'js-yaml';
 
 let statusBarItem: vscode.StatusBarItem;
 let intervalId: NodeJS.Timeout | undefined;
@@ -30,11 +29,11 @@ function loadConfig(context: vscode.ExtensionContext): Config {
     try {
         if (fs.existsSync(configPath)) {
             const fileContents = fs.readFileSync(configPath, 'utf8');
-            const parsed = yaml.load(fileContents) as Partial<Config>;
+            const parsed = parseSimpleYaml(fileContents);
             return {
-                refresh_interval_seconds: parsed.refresh_interval_seconds ?? DEFAULT_CONFIG.refresh_interval_seconds,
-                low_credit_warning_threshold: parsed.low_credit_warning_threshold ?? DEFAULT_CONFIG.low_credit_warning_threshold,
-                low_credit_color_threshold: parsed.low_credit_color_threshold ?? DEFAULT_CONFIG.low_credit_color_threshold,
+                refresh_interval_seconds: parseNumeric(parsed['refresh_interval_seconds']) ?? DEFAULT_CONFIG.refresh_interval_seconds,
+                low_credit_warning_threshold: parseNumeric(parsed['low_credit_warning_threshold']) ?? DEFAULT_CONFIG.low_credit_warning_threshold,
+                low_credit_color_threshold: parseNumeric(parsed['low_credit_color_threshold']) ?? DEFAULT_CONFIG.low_credit_color_threshold,
             };
         }
     } catch (e) {
@@ -44,6 +43,29 @@ function loadConfig(context: vscode.ExtensionContext): Config {
         );
     }
     return DEFAULT_CONFIG;
+}
+
+function parseSimpleYaml(content: string): Record<string, string | number> {
+    const result: Record<string, string | number> = {};
+    for (const rawLine of content.split('\n')) {
+        const line = rawLine.split('#')[0].trim();
+        if (!line) { continue; }
+        const colonIndex = line.indexOf(':');
+        if (colonIndex === -1) { continue; }
+        const key = line.substring(0, colonIndex).trim();
+        const rawValue = line.substring(colonIndex + 1).trim();
+        // Try number first, fallback to string
+        const num = parseFloat(rawValue);
+        result[key] = isNaN(num) ? rawValue : num;
+    }
+    return result;
+}
+
+function parseNumeric(value: string | number | undefined): number | undefined {
+    if (value === undefined) { return undefined; }
+    if (typeof value === 'number') { return value; }
+    const num = parseFloat(value);
+    return isNaN(num) ? undefined : num;
 }
 
 function getPythonCommand(): string {
